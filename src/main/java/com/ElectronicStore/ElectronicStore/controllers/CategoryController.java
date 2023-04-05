@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/categories")
 public class CategoryController {
@@ -17,8 +19,8 @@ public class CategoryController {
     private CategoryService categoryService;
 
     // create
-    @GetMapping
-    public ResponseEntity<CategoryDto> createCategory(@RequestBody CategoryDto categoryDto) {
+    @PostMapping
+    public ResponseEntity<CategoryDto> createCategory(@Valid @RequestBody CategoryDto categoryDto) {
         // call service to save object
         CategoryDto categoryDto1 = categoryService.create(categoryDto);
         return new ResponseEntity<>(categoryDto1, HttpStatus.CREATED);
@@ -45,10 +47,10 @@ public class CategoryController {
 
 
     // getall
-
+@GetMapping
     public ResponseEntity<PageableResponse<CategoryDto>> getAll(
             @RequestParam(value ="pageNumber", defaultValue= "0", required= false) int pageNumber,
-            @RequestParam(value ="pageSize", defaultValue= "0",required= false) int pagesize,
+            @RequestParam(value ="pageSize", defaultValue= "10",required= false) int pagesize,
             @RequestParam(value ="sortBy", defaultValue= "title", required= false) String sortBy,
             @RequestParam(value ="sortDir", defaultValue= "asc", required= false) String sortDir
     ){
