@@ -3,6 +3,7 @@ package com.ElectronicStore.ElectronicStore.entities;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Calendar;
 
 @Getter
 @Setter
@@ -11,7 +12,8 @@ import javax.persistence.*;
 @Builder
 @Entity
 @Table(name="users")
-public class User {
+
+public class User  {
 
     @Id
    // @GeneratedValue(strategy = GenerationType.Identity)
@@ -34,5 +36,5 @@ public class User {
     @Column(name="user_image_name")
     private String imageName;
 
+    }
 
-}

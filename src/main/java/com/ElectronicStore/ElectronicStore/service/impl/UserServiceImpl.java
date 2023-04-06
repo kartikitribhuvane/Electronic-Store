@@ -16,8 +16,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.stereotype.Service;
 
+import javax.management.relation.Role;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
@@ -31,7 +33,7 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-  private UserRepo userRepo;
+     private UserRepo userRepo;
 
     @Autowired
     private ModelMapper mapper;
@@ -41,17 +43,23 @@ public class UserServiceImpl implements UserService {
 
     private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
+
     @Override
     public UserDto createUser(UserDto userDto) {
 
         // generate unique id in string format
        String userId = UUID.randomUUID().toString();
        userDto.setUserId(userId);
-
+        //encoding password
+        userDto.setPassword("passwordEncoder.encode(userDto.getPassword())");
         // dto->entity
         User user= dtoToEntity(userDto);
-        User savedUser = userRepo.save (user);
-       // entity-> dto
+
+        //fetch role of normal and set it to user
+        Role role = roleRepo.findById(normalRoleId).get();
+        User.getRoles().add(role);
+         User savedUser = userRepo.save (user);
+         // entity-> dto
         UserDto newDto = entityToDto(savedUser);
         return newDto;
     }
@@ -123,7 +131,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> seachUser(String keyword) {
+    public List<UserDto> searchUser(String keyword) {
         List<User>users = userRepo.findByNameContaining(keyword);
         List<UserDto> dtoList= users.stream().map(user -> entityToDto(user)).collect(Collectors.toList());
         return dtoList;

@@ -101,7 +101,7 @@ public class UserController {
 
     @GetMapping("/search/{keywords}")
     public ResponseEntity<List<UserDto>> searchUser(@PathVariable String keywords) {
-        return new ResponseEntity<>(userService.seachUser(keywords), HttpStatus.OK);
+        return new ResponseEntity<>(userService.searchUser(keywords), HttpStatus.OK);
 
     }
       // upload user image
