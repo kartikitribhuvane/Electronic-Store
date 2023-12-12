@@ -9,6 +9,10 @@ import java.util.Date;
 @NoArgsConstructor
 @Getter
 @Setter
+<<<<<<< HEAD
+=======
+@ToString
+>>>>>>> origin/master
 public class ProductDto {
 
     private String productId;
